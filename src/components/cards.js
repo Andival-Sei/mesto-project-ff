@@ -1,3 +1,6 @@
+// cards.js
+
+// Массив с начальными карточками
 const initialCards = [
   {
     name: "Архыз",
@@ -25,6 +28,19 @@ const initialCards = [
   },
 ];
 
+// Функция удаления карточки
+function deleteCard(cardElement) {
+  // Удаляет DOM-элемент карточки из разметки
+  cardElement.remove();
+}
+
+// Функция-обработчик лайка карточки
+function handleLikeButtonClick(evt) {
+  // Переключает состояние кнопки лайка (активный/неактивный)
+  evt.target.classList.toggle("card__like-button_is-active");
+}
+
+// Функция создания карточки
 function createCard(
   cardData,
   cardTemplate,
@@ -46,41 +62,20 @@ function createCard(
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
-  // Добавляем обработчик удаления карточки
+  // Навешиваем обработчик удаления карточки
   deleteButton.addEventListener("click", () => {
     deleteCard(cardElement);
   });
 
+  // Навешиваем обработчик лайка
   likeButton.addEventListener("click", handleLikeButtonClick);
-  cardImage.addEventListener("click", handleCardImageClick);
 
+  // Навешиваем обработчик открытия попапа с картинкой
+  cardImage.addEventListener("click", () => handleCardImageClick(cardData));
+
+  // Возвращаем готовый DOM-элемент карточки
   return cardElement;
 }
 
-// Функция удаления карточки
-function deleteCard(cardElement) {
-  cardElement.remove();
-}
-
-function handleLikeButtonClick(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");
-}
-function handleCardImageClick(
-  evt,
-  imagePopup,
-  imagePopupImage,
-  imagePopupCaption,
-  openModal
-) {
-  imagePopupImage.src = evt.target.src;
-  imagePopupCaption.textContent = evt.target.alt;
-  openModal(imagePopup);
-}
-
-export {
-  initialCards,
-  createCard,
-  deleteCard,
-  handleLikeButtonClick,
-  handleCardImageClick,
-};
+// Экспортируем необходимые сущности для использования в других модулях
+export { initialCards, createCard, deleteCard, handleLikeButtonClick };

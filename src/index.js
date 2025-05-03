@@ -41,8 +41,16 @@ const popups = document.querySelectorAll(".popup");
 
 // 3. Функции-обработчики
 
+// Обработчик клика по изображению карточки
+function handleCardImageClick({ link, name }) {
+  imagePopupImage.src = link; 
+  imagePopupImage.alt = name; 
+  imagePopupCaption.textContent = name; 
+  openModal(imagePopup); 
+}
+
 // Обработчик отправки формы редактирования профиля
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault(); // Отменяем стандартную отправку формы
   // Обновляем данные профиля на странице
   profileTitle.textContent = nameInput.value;
@@ -63,14 +71,7 @@ function handleAddCardSubmit(evt) {
     cardTemplate,
     deleteCard,
     handleLikeButtonClick,
-    (evt) =>
-      handleCardImageClick(
-        evt,
-        imagePopup,
-        imagePopupImage,
-        imagePopupCaption,
-        openModal
-      )
+    handleCardImageClick
   );
   // Добавляем карточку в начало списка
   placesList.prepend(newCard);
@@ -82,7 +83,7 @@ function handleAddCardSubmit(evt) {
 // 4. Навешивание обработчиков событий
 
 // Отправка формы редактирования профиля
-formElement.addEventListener("submit", handleFormSubmit);
+formElement.addEventListener("submit", handleProfileFormSubmit);
 // Отправка формы добавления карточки
 addCardForm.addEventListener("submit", handleAddCardSubmit);
 
@@ -119,14 +120,7 @@ function renderCards() {
       cardTemplate,
       deleteCard,
       handleLikeButtonClick,
-      (evt) =>
-        handleCardImageClick(
-          evt,
-          imagePopup,
-          imagePopupImage,
-          imagePopupCaption,
-          openModal
-        )
+      handleCardImageClick
     );
     placesList.append(cardElement);
   });
