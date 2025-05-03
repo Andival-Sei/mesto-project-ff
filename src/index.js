@@ -4,8 +4,7 @@ import {
   initialCards,
   createCard,
   deleteCard,
-  handleLikeButtonClick,
-  handleCardImageClick,
+  handleLikeButtonClick
 } from "./components/cards.js"; // Импорт функций и данных для карточек
 import { openModal, closeModal } from "./components/modal.js"; // Импорт функций для работы с попапами
 
