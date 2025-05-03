@@ -27,6 +27,7 @@ const initialCards = [
 
 function createCard(
   cardData,
+  cardTemplate,
   deleteCard,
   handleLikeButtonClick,
   handleCardImageClick
@@ -64,12 +65,15 @@ function deleteCard(cardElement) {
 function handleLikeButtonClick(evt) {
   evt.target.classList.toggle("card__like-button_is-active");
 }
-function handleCardImageClick(evt) {
-  // логика открытия попапа с картинкой
-
+function handleCardImageClick(
+  evt,
+  imagePopup,
+  imagePopupImage,
+  imagePopupCaption,
+  openModal
+) {
   imagePopupImage.src = evt.target.src;
   imagePopupCaption.textContent = evt.target.alt;
-
   openModal(imagePopup);
 }
 
