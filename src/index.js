@@ -1,11 +1,11 @@
 // 1. Импорты модулей и стилей
 import "./pages/index.css"; // Импорт основного CSS-файла
 import {
-  initialCards,
   createCard,
   deleteCard,
-  handleLikeButtonClick
-} from "./components/cards.js"; // Импорт функций и данных для карточек
+  handleLikeButtonClick,
+} from "./components/card.js"; // Импорт функций и данных для карточек
+import { initialCards } from "./components/cards.js"; // Импорт функций для работы с попапами
 import { openModal, closeModal } from "./components/modal.js"; // Импорт функций для работы с попапами
 
 // 2. Глобальные переменные (DOM-элементы)
@@ -42,10 +42,10 @@ const popups = document.querySelectorAll(".popup");
 
 // Обработчик клика по изображению карточки
 function handleCardImageClick({ link, name }) {
-  imagePopupImage.src = link; 
-  imagePopupImage.alt = name; 
-  imagePopupCaption.textContent = name; 
-  openModal(imagePopup); 
+  imagePopupImage.src = link;
+  imagePopupImage.alt = name;
+  imagePopupCaption.textContent = name;
+  openModal(imagePopup);
 }
 
 // Обработчик отправки формы редактирования профиля
