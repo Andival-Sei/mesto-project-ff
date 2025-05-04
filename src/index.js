@@ -5,7 +5,7 @@ import {
   deleteCard,
   handleLikeButtonClick,
 } from "./components/card.js"; // Импорт функций и данных для карточек
-import { initialCards } from "./components/cards.js"; // Импорт функций для работы с попапами
+import { initialCards } from "./components/cards.js"; // Импорт массива карточек
 import { openModal, closeModal } from "./components/modal.js"; // Импорт функций для работы с попапами
 
 // 2. Глобальные переменные (DOM-элементы)
