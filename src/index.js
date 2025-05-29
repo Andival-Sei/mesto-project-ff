@@ -7,6 +7,7 @@ import {
 } from "./components/card.js"; // Импорт функций и данных для карточек
 import { initialCards } from "./components/cards.js"; // Импорт массива карточек
 import { openModal, closeModal } from "./components/modal.js"; // Импорт функций для работы с попапами
+import { enableValidation, clearValidation } from "./components/validate.js"; // Импорт функций для валидации
 
 // 2. Глобальные переменные (DOM-элементы)
 // Шаблон карточки
@@ -37,6 +38,16 @@ const imagePopupCaption = imagePopup.querySelector(".popup__caption");
 
 // Все попапы на странице
 const popups = document.querySelectorAll(".popup");
+
+// Конфиг валидации форм
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 
 // 3. Функции-обработчики
 
@@ -91,11 +102,18 @@ editButton.addEventListener("click", () => {
   // Подставляем актуальные значения в инпуты
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
+
+  clearValidation(formElement, validationConfig);
+
   openModal(editProfilePopup);
 });
 
 // Открытие попапа добавления карточки
-addButton.addEventListener("click", () => openModal(addCardPopup));
+addButton.addEventListener("click", () => {
+  addCardForm.reset();
+  clearValidation(addCardForm, validationConfig);
+  openModal(addCardPopup);
+});
 
 // Универсальные обработчики закрытия попапов по крестику и оверлею
 popups.forEach((popup) => {
@@ -125,3 +143,5 @@ function renderCards() {
   });
 }
 renderCards(); // Отрисовываем стартовые карточки
+enableValidation(validationConfig); // Инициализация валидации
+
