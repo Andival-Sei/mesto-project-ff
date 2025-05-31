@@ -1,9 +1,9 @@
-import { removeCard, likeCard, unlikeCard } from './api.js';
+import { likeCard, unlikeCard } from "./api.js";
 
 // Функция удаления карточки (теперь просто вызывает обработчик)
 function deleteCard(cardElement, handleDeleteButtonClick) {
   // Теперь используем handleDeleteButtonClick как параметр
-  if (typeof handleDeleteButtonClick === 'function') {
+  if (typeof handleDeleteButtonClick === "function") {
     handleDeleteButtonClick(cardElement);
   }
 }
@@ -17,26 +17,26 @@ function handleLikeButtonClick(evt, cardId, likeCount) {
   const likeMethod = isLiked ? unlikeCard : likeCard;
 
   likeMethod(cardId)
-      .then((updatedCard) => {
-        // Обновляем состояние кнопки
-        likeButton.classList.toggle("card__like-button_is-active");
+    .then((updatedCard) => {
+      // Обновляем состояние кнопки
+      likeButton.classList.toggle("card__like-button_is-active");
 
-        // Обновляем счетчик лайков из ответа сервера
-        likeCount.textContent = updatedCard.likes.length;
-      })
-      .catch((err) => {
-        console.error(`Ошибка при обновлении лайка: ${err}`);
-      });
+      // Обновляем счетчик лайков из ответа сервера
+      likeCount.textContent = updatedCard.likes.length;
+    })
+    .catch((err) => {
+      console.error(`Ошибка при обновлении лайка: ${err}`);
+    });
 }
 
 // Функция создания карточки
 function createCard(
-    cardData,
-    cardTemplate,
-    onDeleteCard,
-    handleLikeButtonClick,
-    handleCardImageClick,
-    handleDeleteButtonClick
+  cardData,
+  cardTemplate,
+  onDeleteCard,
+  handleLikeButtonClick,
+  handleCardImageClick,
+  handleDeleteButtonClick,
 ) {
   // Клонируем шаблон карточки
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
@@ -60,16 +60,16 @@ function createCard(
   likeCount.textContent = cardData.likes.length;
 
   // Получаем ID текущего пользователя
-  const userId = document.querySelector('.profile__title').dataset.userId;
+  const userId = document.querySelector(".profile__title").dataset.userId;
 
   // Проверяем, является ли текущий пользователь владельцем карточки
   if (cardData.owner && cardData.owner._id !== userId) {
     // Если не владелец - скрываем кнопку удаления
-    deleteButton.style.display = 'none';
+    deleteButton.style.display = "none";
   }
 
   // Проверяем, лайкнул ли текущий пользователь карточку
-  const isLiked = cardData.likes.some(user => user._id === userId);
+  const isLiked = cardData.likes.some((user) => user._id === userId);
   if (isLiked) {
     likeButton.classList.add("card__like-button_is-active");
   }
