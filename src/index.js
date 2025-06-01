@@ -34,9 +34,9 @@ const editProfilePopup = document.querySelector (".popup_type_edit");
 const editButton = document.querySelector (".profile__edit-button");
 const profileTitle = document.querySelector (".profile__title");
 const profileDescription = document.querySelector (".profile__description");
-const formElement = document.querySelector ("form[name=\"edit-profile\"]");
-const nameInput = formElement.querySelector ("input[name=\"name\"]");
-const jobInput = formElement.querySelector ("input[name=\"description\"]");
+const editProfileForm = document.querySelector ("form[name=\"edit-profile\"]");
+const nameInput = editProfileForm.querySelector ("input[name=\"name\"]");
+const jobInput = editProfileForm.querySelector ("input[name=\"description\"]");
 
 // Элементы для добавления карточки
 const addButton = document.querySelector (".profile__add-button");
@@ -70,6 +70,15 @@ const validationConfig = {
 
 // 3. Функции-обработчики
 
+// Утилитарная функция для изменения текста кнопки в зависимости от состояния загрузки
+function renderLoading(isLoading, button, buttonText = "Сохранить", loadingText = "Сохранение...") {
+  if (isLoading) {
+    button.textContent = loadingText;
+  } else {
+    button.textContent = buttonText;
+  }
+}
+
 // Обработчик отправки формы обновления аватара
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault ();
@@ -77,12 +86,12 @@ function handleAvatarFormSubmit(evt) {
   // Получаем значение из инпута
   const avatarLink = avatarLinkInput.value;
 
-  // Получаем кнопку отправки формы
-  const submitButton = avatarForm.querySelector (".popup__button");
+  // Получаем кнопку отправки формы через event.submitter
+  const submitButton = evt.submitter;
   // Сохраняем оригинальный текст кнопки
   const originalButtonText = submitButton.textContent;
-  // Меняем текст кнопки на "Сохранение..."
-  submitButton.textContent = "Сохранение...";
+  // Включаем индикацию загрузки
+  renderLoading (true, submitButton, originalButtonText);
 
   // Отправляем запрос на сервер для обновления аватара
   updateUserAvatar (avatarLink)
@@ -98,8 +107,8 @@ function handleAvatarFormSubmit(evt) {
       console.error (`Ошибка при обновлении аватара: ${err}`);
     })
     .finally (() => {
-      // Возвращаем исходный текст кнопки
-      submitButton.textContent = originalButtonText;
+      // Выключаем индикацию загрузки
+      renderLoading (false, submitButton, originalButtonText);
     });
 }
 
@@ -119,12 +128,12 @@ function handleProfileFormSubmit(evt) {
   const name = nameInput.value;
   const about = jobInput.value;
 
-  // Получаем кнопку отправки формы
-  const submitButton = formElement.querySelector (".popup__button");
+  // Получаем кнопку отправки формы через event.submitter
+  const submitButton = evt.submitter;
   // Сохраняем оригинальный текст кнопки
   const originalButtonText = submitButton.textContent;
-  // Меняем текст кнопки на "Сохранение..."
-  submitButton.textContent = "Сохранение...";
+  // Включаем индикацию загрузки
+  renderLoading (true, submitButton, originalButtonText);
 
   // Отправляем запрос на сервер для обновления профиля
   updateUserProfile (name, about)
@@ -139,8 +148,8 @@ function handleProfileFormSubmit(evt) {
       console.error (`Ошибка при обновлении профиля: ${err}`);
     })
     .finally (() => {
-      // Возвращаем исходный текст кнопки
-      submitButton.textContent = originalButtonText;
+      // Выключаем индикацию загрузки
+      renderLoading (false, submitButton, originalButtonText);
     });
 }
 
@@ -152,12 +161,12 @@ function handleAddCardSubmit(evt) {
   const name = placeNameInput.value;
   const link = placeLinkInput.value;
 
-  // Получаем кнопку отправки формы
-  const submitButton = addCardForm.querySelector (".popup__button");
+  // Получаем кнопку отправки формы через event.submitter
+  const submitButton = evt.submitter;
   // Сохраняем оригинальный текст кнопки
   const originalButtonText = submitButton.textContent;
-  // Меняем текст кнопки на "Сохранение..."
-  submitButton.textContent = "Сохранение...";
+  // Включаем индикацию загрузки
+  renderLoading (true, submitButton, originalButtonText);
 
   // Отправляем запрос на сервер для добавления карточки
   addCard (name, link)
@@ -183,8 +192,8 @@ function handleAddCardSubmit(evt) {
       console.error (`Ошибка при добавлении карточки: ${err}`);
     })
     .finally (() => {
-      // Возвращаем исходный текст кнопки
-      submitButton.textContent = originalButtonText;
+      // Выключаем индикацию загрузки
+      renderLoading (false, submitButton, originalButtonText);
     });
 }
 
@@ -207,7 +216,7 @@ avatarEditButton.addEventListener ("click", () => {
 });
 
 // Отправка формы редактирования профиля
-formElement.addEventListener ("submit", handleProfileFormSubmit);
+editProfileForm.addEventListener ("submit", handleProfileFormSubmit);
 // Отправка формы добавления карточки
 addCardForm.addEventListener ("submit", handleAddCardSubmit);
 
@@ -217,7 +226,7 @@ editButton.addEventListener ("click", () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
 
-  clearValidation (formElement, validationConfig);
+  clearValidation (editProfileForm, validationConfig);
 
   openModal (editProfilePopup);
 });
@@ -235,9 +244,10 @@ deleteCardButton.addEventListener ("click", () => {
     // Получаем ID карточки из data-атрибута
     const cardId = cardToDelete.dataset.cardId;
 
-    // Меняем текст кнопки на "Удаление..."
+    // Сохраняем оригинальный текст кнопки
     const originalButtonText = deleteCardButton.textContent;
-    deleteCardButton.textContent = "Удаление...";
+    // Включаем индикацию загрузки с текстом "Удаление..."
+    renderLoading (true, deleteCardButton, originalButtonText, "Удаление...");
 
     // Отправляем запрос на удаление карточки
     removeCard (cardId)
@@ -251,8 +261,8 @@ deleteCardButton.addEventListener ("click", () => {
         console.error (`Ошибка при удалении карточки: ${err}`);
       })
       .finally (() => {
-        // Возвращаем исходный текст кнопки
-        deleteCardButton.textContent = originalButtonText;
+        // Выключаем индикацию загрузки
+        renderLoading (false, deleteCardButton, originalButtonText);
         // Очищаем ссылку на удаляемую карточку
         cardToDelete = null;
       });

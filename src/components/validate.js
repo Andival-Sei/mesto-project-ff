@@ -44,14 +44,24 @@ function hasInvalidInput(inputList) {
   });
 }
 
+// Функция деактивации кнопки
+function disableButton(buttonElement, config) {
+  buttonElement.classList.add(config.inactiveButtonClass);
+  buttonElement.disabled = true;
+}
+
+// Функция активации кнопки
+function enableButton(buttonElement, config) {
+  buttonElement.classList.remove(config.inactiveButtonClass);
+  buttonElement.disabled = false;
+}
+
 // Функция переключения состояния кнопки
 function toggleButtonState(inputList, buttonElement, config) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(config.inactiveButtonClass);
-    buttonElement.disabled = true;
+    disableButton(buttonElement, config);
   } else {
-    buttonElement.classList.remove(config.inactiveButtonClass);
-    buttonElement.disabled = false;
+    enableButton(buttonElement, config);
   }
 }
 
@@ -84,9 +94,8 @@ export function clearValidation(formElement, config) {
     hideInputError(formElement, inputElement, config);
   });
 
-  // Делаем кнопку неактивной при очистке формы
-  buttonElement.classList.add(config.inactiveButtonClass);
-  buttonElement.disabled = true;
+  // Используем выделенную функцию для деактивации кнопки
+  disableButton(buttonElement, config);
 }
 
 // Функция включения валидации
